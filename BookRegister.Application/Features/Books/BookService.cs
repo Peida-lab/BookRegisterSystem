@@ -64,22 +64,55 @@ internal class BookService(IBookRepository bookRepository)
     }
 
     public GetBookResult GetBookById(Guid bookId)
-{
-    var book = bookRepository.GetById(bookId);
-
-    if (book is null)
     {
+        var book = bookRepository.GetById(bookId);
+
+        if (book is null)
+        {
+            return new GetBookResult(
+                false,
+                null,
+                $"Book with id '{bookId}' was not found"
+            );
+        }
+
         return new GetBookResult(
-            false,
-            null,
-            $"Book with id '{bookId}' was not found"
+            true,
+            book,
+            null
         );
     }
 
-    return new GetBookResult(
-        true,
-        book,
-        null
+    public UpdateBookResult UpdateBook(UpdateBookRequest request)
+{
+    ArgumentNullException.ThrowIfNull(request);
+
+    var book = bookRepository.GetById(request.UpdatedBook.BookId);
+
+    if (book is null)
+    {
+        return new UpdateBookResult(
+            false,
+            null,
+            $"Book with id '{request.UpdatedBook.BookId}' was not found"
+        );
+    }
+
+    var updated = bookRepository.Update(request.UpdatedBook);
+
+    if (updated)
+    {
+        return new UpdateBookResult(
+            true,
+            request.UpdatedBook,
+            null
+        );
+    }
+
+    return new UpdateBookResult(
+        false,
+        null,
+        "Unable to update book"
     );
 }
 }
