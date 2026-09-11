@@ -3,7 +3,7 @@ using BookRegister.Application.Features.Books.Dtos.Results;
 
 namespace BookRegister.Application.Features.Books;
 
-internal interface IBookService
+public interface IBookService
 {
     CreateBookResult CreateBook(CreateBookRequest request);
     DeleteBookResult DeleteBookById(Guid bookId);
