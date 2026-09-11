@@ -4,7 +4,7 @@ using BookRegister.Domain.Books;
 
 namespace BookRegister.Application.Features.Books;
 
-internal class BookService(IBookRepository bookRepository)
+internal class BookService(IBookRepository bookRepository) : IBookService
 {
     public CreateBookResult CreateBook(CreateBookRequest request)
     {
@@ -84,35 +84,63 @@ internal class BookService(IBookRepository bookRepository)
     }
 
     public UpdateBookResult UpdateBook(UpdateBookRequest request)
-{
-    ArgumentNullException.ThrowIfNull(request);
-
-    var book = bookRepository.GetById(request.UpdatedBook.BookId);
-
-    if (book is null)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var book = bookRepository.GetById(request.UpdatedBook.BookId);
+
+        if (book is null)
+        {
+            return new UpdateBookResult(
+                false,
+                null,
+                $"Book with id '{request.UpdatedBook.BookId}' was not found"
+            );
+        }
+
+        var updated = bookRepository.Update(request.UpdatedBook);
+
+        if (updated)
+        {
+            return new UpdateBookResult(
+                true,
+                request.UpdatedBook,
+                null
+            );
+        }
+
         return new UpdateBookResult(
             false,
             null,
-            $"Book with id '{request.UpdatedBook.BookId}' was not found"
+            "Unable to update book"
         );
     }
 
-    var updated = bookRepository.Update(request.UpdatedBook);
-
-    if (updated)
+    public DeleteBookResult DeleteBookById(Guid bookId)
     {
-        return new UpdateBookResult(
-            true,
-            request.UpdatedBook,
-            null
+        var book = bookRepository.GetById(bookId);
+
+        if (book is null)
+        {
+            return new DeleteBookResult(
+                false,
+                $"Book with id '{bookId}' was not found"
+            );
+        }
+
+        var deleted = bookRepository.Delete(book);
+
+        if (deleted)
+        {
+            return new DeleteBookResult(
+                true,
+                null
+            );
+        }
+
+        return new DeleteBookResult(
+            false,
+            "Unable to delete book"
         );
     }
-
-    return new UpdateBookResult(
-        false,
-        null,
-        "Unable to update book"
-    );
-}
 }
