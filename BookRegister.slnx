@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BookRegister.Domain/BookRegister.Domain.csproj" />
+  <Project Path="BookRegister.Infrastructure/BookRegister.Infrastructure.csproj" />
+  <Project Path="BookRegister.Presentation/BookRegister.Presentation.csproj" />
+</Solution>
