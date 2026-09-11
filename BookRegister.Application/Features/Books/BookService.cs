@@ -17,8 +17,8 @@ internal class BookService(IBookRepository bookRepository)
 
             book = new Book
             (
-                bookId, 
-                request.BookName, 
+                bookId,
+                request.BookName,
                 request.BookGenre
             );
         }
@@ -27,20 +27,20 @@ internal class BookService(IBookRepository bookRepository)
         catch (Exception ex)
         {
             return new CreateBookResult(
-                false, 
-                null, 
+                false,
+                null,
                 ex.Message
             );
         }
 
         bool saved = bookRepository.Create(book);
 
-        if(saved)
+        if (saved)
         {
             return new CreateBookResult
             (
-                true, 
-                book, 
+                true,
+                book,
                 null
             );
         }
@@ -52,4 +52,34 @@ internal class BookService(IBookRepository bookRepository)
             "Unable to save book"
         );
     }
+    public GetAllBooksResult GetAllBooks()
+    {
+        var books = bookRepository.GetAll();
+
+        return new GetAllBooksResult(
+            true,
+            books,
+            null
+        );
+    }
+
+    public GetBookResult GetBookById(Guid bookId)
+{
+    var book = bookRepository.GetById(bookId);
+
+    if (book is null)
+    {
+        return new GetBookResult(
+            false,
+            null,
+            $"Book with id '{bookId}' was not found"
+        );
+    }
+
+    return new GetBookResult(
+        true,
+        book,
+        null
+    );
+}
 }
