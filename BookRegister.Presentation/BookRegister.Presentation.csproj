@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../BookRegister.Application/BookRegister.Application.csproj" />
+    <ProjectReference Include="../BookRegister.Infrastructure/BookRegister.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

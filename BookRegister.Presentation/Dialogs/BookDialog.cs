@@ -78,7 +78,7 @@ internal class BookDialog(IBookService bookService)
 
         foreach (var book in result.Books)
         {
-            Console.WriteLine($"{book.BookName} - {book.BookGenre}");
+            Console.WriteLine($"{book.BookId.ToString()[..3]} - {book.BookName} - {book.BookGenre}");
         }
 
         Console.ReadKey();
